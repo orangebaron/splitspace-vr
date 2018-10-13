@@ -1,14 +1,7 @@
 package ga.hhfed.masochistsplitspace
 
-import android.app.Activity
 import android.graphics.*
-import android.util.Log
-import android.view.MotionEvent
 import java.util.*
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.thread
 import kotlin.concurrent.timerTask
 
 class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
@@ -31,7 +24,6 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
     var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
-    //private var objectsToSpawn = MutableList(7){false}
     var countdownVariable = .5f
 
     private fun addRandomObject() {

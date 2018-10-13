@@ -1,10 +1,7 @@
 package ga.hhfed.masochistsplitspace
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
@@ -31,7 +28,6 @@ class VRView: View {
     override fun onDraw(canv: Canvas?) {
         super.onDraw(canv)
         if (!loaded) {
-            println("UWE-${eyeSize.x} ${eyeSize.y}")
             loadedResources = LoadedResources(resources,this)
             game = Game(60,loadedResources, this)
             loaded = true
@@ -58,9 +54,9 @@ class VRView: View {
         func(points.map {
             Point3(
                 if (it.eye == Eye.Left)
-                    Point(width - it.p.y - 120, it.p.x + 227)
+                    Point(width - it.p.y - 120, it.p.x + 227-80)
                 else
-                    Point(width - it.p.y - 120, it.p.x + 145 + height / 2)
+                    Point(width - it.p.y - 120, it.p.x + 145-80 + height / 2)
             , it.eye)
         })
     }
@@ -84,6 +80,7 @@ class VRView: View {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
     init {
+        setBackgroundColor(Color.rgb(0,0,40))
         systemUiVisibility = barsHidden
     }
 }
