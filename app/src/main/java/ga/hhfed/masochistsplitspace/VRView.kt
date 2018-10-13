@@ -79,6 +79,8 @@ class VRView: View {
                     else 0) or
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
+    val tiltManager = TiltManager(context as MainActivity)
+    
     init {
         setBackgroundColor(Color.rgb(0,0,40))
         systemUiVisibility = barsHidden
