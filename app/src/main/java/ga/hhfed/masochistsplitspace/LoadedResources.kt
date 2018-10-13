@@ -1,8 +1,11 @@
 package ga.hhfed.masochistsplitspace
 
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 
 class LoadedResources(res: Resources) {
-    val shipTest = BitmapFactory.decodeResource(res,R.drawable.app_src_main_res_drawable_pink_ship)
+    val shipTest: Bitmap = BitmapFactory.decodeResource(res,R.drawable.pinkship)
+    val shooter: Bitmap = BitmapFactory.decodeResource(res,R.drawable.flamedisciple)
+    val flame: Bitmap = BitmapFactory.decodeResource(res,R.drawable.firefly)
 }
