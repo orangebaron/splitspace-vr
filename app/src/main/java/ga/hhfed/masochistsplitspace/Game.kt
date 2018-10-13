@@ -13,8 +13,8 @@ import kotlin.concurrent.timerTask
 
 class Game(val fps: Int, val loadedResources: LoadedResources, val view: VRView){
     //render, and tick
-    var speed = 5/fps //initialize please
-    val oneOverFps = 1f/fps
+    var speed = 5f/fps
+    private val oneOverFps = 1f/fps
 
     enum class Powerup {
         Split, // Splits
@@ -69,6 +69,7 @@ class Game(val fps: Int, val loadedResources: LoadedResources, val view: VRView)
                 it.move()
         }
         shipsToRemove.forEach { shipList.remove(it) }
+        view.invalidate()
     }
     fun draw(canv: Canvas) {
         shipList.forEach { it.draw(canv) }

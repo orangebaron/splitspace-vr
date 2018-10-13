@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 
 class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
-    override fun isIn(p: Point): Boolean { TODO("not implemented") }
+    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
     override var canKill = false
         private set
     private val arbval = 20 //arbitrary value, defining how fast it moves
@@ -28,7 +28,7 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
                     }
                 }
             }
-        } else if (timeRemainingOnScreen >= (timeSpentOnScreen*(4/5))){
+        } else if (timeRemainingOnScreen >= (timeSpentOnScreen*4/5)){
             when(movex){
                 1 -> loc.p.x + game.speed/arbval;
                 -1 -> loc.p.x - game.speed/arbval;
@@ -40,7 +40,7 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
                     }
                 }
             }
-        } else if (timeRemainingOnScreen == (timeSpentOnScreen*(3/5))|| timeRemainingOnScreen == (timeSpentOnScreen*(2/5))) {
+        } else if (timeRemainingOnScreen == (timeSpentOnScreen*3/5)|| timeRemainingOnScreen == (timeSpentOnScreen*(2/5))) {
             EnemyParticle(loc, game.shipList[0].loc, game); //remember to create shiploc var in game
         } else if (timeRemainingOnScreen == (timeSpentOnScreen/5)){
             movex = movex * -1;

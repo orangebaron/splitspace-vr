@@ -11,7 +11,9 @@ import android.view.View
 
 class VRView: View {
     private val activity: Context
-    val loadedResources = LoadedResources(resources)
+    lateinit var loadedResources: LoadedResources
+        private set
+    private var loaded = false
 
     constructor(context: Context) : super(context) {
         activity = context
@@ -28,6 +30,13 @@ class VRView: View {
     private val bmpPaint = Paint()
     override fun onDraw(canv: Canvas?) {
         super.onDraw(canv)
+        if (!loaded) {
+            println("UWE-${eyeSize.x} ${eyeSize.y}")
+            loadedResources = LoadedResources(resources,this)
+            game = Game(60,loadedResources, this)
+            loaded = true
+        }
+
         /*canv?.let { canvas ->
             for (x in listOf(0f,eyeSize.x/2-loadedResources.shipTest.height/2,eyeSize.x-loadedResources.shipTest.height))
                 for (y in listOf(0f,eyeSize.y/2-loadedResources.shipTest.width/2,eyeSize.x-loadedResources.shipTest.width))
@@ -43,7 +52,7 @@ class VRView: View {
 
     enum class Eye { Left, Right }
 
-    val game = Game(60,LoadedResources(resources),this)
+    lateinit private var game: Game
 
     fun drawForEye(points: List<Point3>, func: (List<Point3>) -> Unit) {
         func(points.map {
