@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 
 class EnemyParticle(override var loc: Point3, val shiploc: Point3, private val game: Game): Enemy{
-    override fun isIn(p: Point): Boolean { TODO("not implemented") }
+    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
     private val yintercept = loc.p.y;
     override fun move() {
         loc.p = Point(loc.p.x + game.speed,yintercept + loc.p.x * slope)
@@ -18,7 +18,7 @@ class EnemyParticle(override var loc: Point3, val shiploc: Point3, private val g
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     private val radius = (bitmap.height+bitmap.width)/2
-    private val slope = ((shiploc.p.y.toDouble()-loc.p.y.toDouble())/(shiploc.p.x.toDouble()-loc.p.x.toDouble())).toFloat();
+    private val slope = ((shiploc.p.y.toDouble()-loc.p.y.toDouble())/(shiploc.p.x.toDouble()-loc.p.x.toDouble())).toFloat()
 
     override val canKill
         get() = loc.p.y-radius > game.view.eyeSize.y ||
