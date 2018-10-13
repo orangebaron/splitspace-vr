@@ -28,18 +28,13 @@ class VRView: View {
     private val bmpPaint = Paint()
     override fun onDraw(canv: Canvas?) {
         super.onDraw(canv)
-        canv?.let { canvas ->
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Left, Point(eyeSize.x/2-loadedResources.shipTest.width/2, 0f))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Right, Point(eyeSize.x/2-loadedResources.shipTest.width/2, 0f))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Left, Point(eyeSize.x/2-loadedResources.shipTest.width/2, eyeSize.y-loadedResources.shipTest.height))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Right, Point(eyeSize.x/2-loadedResources.shipTest.width/2, eyeSize.y-loadedResources.shipTest.height))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Left, Point(eyeSize.x-loadedResources.shipTest.width, eyeSize.y/2-loadedResources.shipTest.height/2))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Right, Point(eyeSize.x-loadedResources.shipTest.width, eyeSize.y/2-loadedResources.shipTest.height/2))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Left, Point(0f, eyeSize.y/2-loadedResources.shipTest.height/2))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Right, Point(0f, eyeSize.y/2-loadedResources.shipTest.height/2))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Left, Point(eyeSize.x/2-loadedResources.shipTest.width/2, eyeSize.y/2-loadedResources.shipTest.height/2))
-            drawBmpForEye(canvas, loadedResources.shipTest, Eye.Right, Point(eyeSize.x/2-loadedResources.shipTest.width/2, eyeSize.y/2-loadedResources.shipTest.height/2))
-        }
+        /*canv?.let { canvas ->
+            for (x in listOf(0f,eyeSize.x/2-loadedResources.shipTest.height/2,eyeSize.x-loadedResources.shipTest.height))
+                for (y in listOf(0f,eyeSize.y/2-loadedResources.shipTest.width/2,eyeSize.x-loadedResources.shipTest.width))
+                    for (eye in listOf(Eye.Left,Eye.Right))
+                        drawBmpForEye(canvas,loadedResources.shipTest,Point3(Point(x,y),eye))
+            }*/
+        canv?.let(game::draw)
         systemUiVisibility = barsHidden
     }
 
@@ -48,17 +43,21 @@ class VRView: View {
 
     enum class Eye { Left, Right }
 
-    fun drawForEye(eye: Eye, points: List<Point>, func: (List<Point>) -> Unit) {
+    val game = Game(60,LoadedResources(resources),this)
+
+    fun drawForEye(points: List<Point3>, func: (List<Point3>) -> Unit) {
         func(points.map {
-            if (eye == Eye.Left)
-                Point(width - it.y - 120, it.x + 227)
-            else
-                Point(width - it.y - 120, it.x + 145 + height / 2)
+            Point3(
+                if (it.eye == Eye.Left)
+                    Point(width - it.p.y - 120, it.p.x + 227)
+                else
+                    Point(width - it.p.y - 120, it.p.x + 145 + height / 2)
+            , it.eye)
         })
     }
 
-    fun drawBmpForEye(canv: Canvas, bmp: Bitmap, eye: Eye, point: Point) = drawForEye(eye, listOf(point)) {
-        canv.drawBitmap(bmp, it[0].x-bmp.height, it[0].y, bmpPaint)
+    fun drawBmpForEye(canv: Canvas, bmp: Bitmap, point: Point3) = drawForEye(listOf(point)) {
+        canv.drawBitmap(bmp, it[0].p.x-bmp.height, it[0].p.y, bmpPaint)
     }
 
     //can add more draw functions if necessary

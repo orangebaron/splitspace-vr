@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 
-class EnemyShooter(override var loc: Point, private val game: Game): Enemy {
+class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
     override fun isIn(p: Point): Boolean { TODO("not implemented") }
     override var canKill = false
         private set
@@ -15,11 +15,11 @@ class EnemyShooter(override var loc: Point, private val game: Game): Enemy {
     private var movey = 0 /*if 0, no movement, if 1, positive movement, if -1, negative movement*/
     override fun move(){
         if (timeRemainingOnScreen == timeSpentOnScreen){
-            when (loc.x){
+            when (loc.p.x){
                 0f -> movex = 1;
                 game.view.eyeSize.x -> movex = -1;
                 else -> {
-                    when(loc.y){
+                    when(loc.p.y){
                         0f -> movey = 1;
                         game.view.eyeSize.y -> movey = -1;
                         else -> {
@@ -30,12 +30,12 @@ class EnemyShooter(override var loc: Point, private val game: Game): Enemy {
             }
         } else if (timeRemainingOnScreen >= (timeSpentOnScreen*(4/5))){
             when(movex){
-                1 -> loc.x + game.speed/arbval;
-                -1 -> loc.x - game.speed/arbval;
+                1 -> loc.p.x + game.speed/arbval;
+                -1 -> loc.p.x - game.speed/arbval;
                 else -> {
                     when(movey){
-                        1 -> loc.y + game.speed/arbval;
-                        -1 -> loc.y + game.speed/arbval;
+                        1 -> loc.p.y + game.speed/arbval;
+                        -1 -> loc.p.y + game.speed/arbval;
                         else -> println("EnemeyShooter not moving good");
                     }
                 }
@@ -48,12 +48,12 @@ class EnemyShooter(override var loc: Point, private val game: Game): Enemy {
         }
         else if (timeRemainingOnScreen < (timeSpentOnScreen/5)){
             when(movex){
-                1 -> loc.x + game.speed/arbval;
-                -1 -> loc.x - game.speed/arbval;
+                1 -> loc.p.x + game.speed/arbval;
+                -1 -> loc.p.x - game.speed/arbval;
                 else -> {
                     when(movey){
-                        1 -> loc.y + game.speed/arbval;
-                        -1 -> loc.y + game.speed/arbval;
+                        1 -> loc.p.y + game.speed/arbval;
+                        -1 -> loc.p.y + game.speed/arbval;
                         else -> println("EnemeyShooter not moving good");
                     }
                 }
@@ -70,5 +70,7 @@ class EnemyShooter(override var loc: Point, private val game: Game): Enemy {
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     private val radius = (bitmap.height+bitmap.width)/2
-    override fun draw(canvas: Canvas) { TODO("not implemented") }
+    override fun draw(canvas: Canvas) {
+        game.view.drawBmpForEye(canvas, bitmap, loc)
+    }
 }

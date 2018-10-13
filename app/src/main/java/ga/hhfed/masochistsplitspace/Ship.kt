@@ -2,15 +2,15 @@ package ga.hhfed.masochistsplitspace
 
 import android.graphics.*
 
-class Ship(var loc: Point, private val skin: Bitmap, private val game: Game) { /*add game*/
-    /*private val timeBetweenParticles = game.fps/5
-    private var timeToNextParticle = timeBetweenParticles*/
+class Ship(var loc: Point3, private val skin: Bitmap, private var speed: Point, private val game: Game) { /*add game*/
     fun move() {
-        //loc += Point(xDirection, 0f) * game.speed //create appropriate move thing
+        if (loc.p.x>game.view.eyeSize.x || loc.p.x<0f) speed = Point(-speed.x,speed.y)
+        if (loc.p.y>game.view.eyeSize.y || loc.p.y<0f) speed = Point(speed.x,-speed.y)
+        loc.p += speed * game.speed.toFloat() //create appropriate move thing
     }
     var canKill = false
-        get() = field || loc.y > game.view.eyeSize.y || loc.x < 0f || loc.x > game.view.eyeSize.x
-        private set
+        //get() = field || loc.p.y > game.view.eyeSize.y || loc.p.x < 0f || loc.p.x > game.view.eyeSize.x
+        //private set
 
     fun explode() {
         canKill = true
@@ -27,8 +27,6 @@ class Ship(var loc: Point, private val skin: Bitmap, private val game: Game) { /
 
     private val paint = Paint()
     fun draw(canvas: Canvas) {
-        canvas.drawBitmap(bitmap, loc.x - bitmap.width/2, loc.y - bitmap.height/2, paint)
+        game.view.drawBmpForEye(canvas, bitmap, loc)
     }
-
-
 }

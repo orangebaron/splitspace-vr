@@ -28,45 +28,47 @@ class Game(val fps: Int, val loadedResources: LoadedResources, val view: VRView)
         ChangeSpeed, // change speed; the associated number is multiplied by size.y/(fps*100) to get the real value
     }
 
-    var shipList = mutableListOf(Ship(Point(0f,0f),view.loadedResources.shipTest,this))
+    var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
-    private var objectsToSpawn = MutableList(7){false}
+    //private var objectsToSpawn = MutableList(7){false}
     var countdownVariable = .5f
 
     private fun addRandomObject() {
-        //val rad = ((Math.random()*.07 + .035)*view.eyeSize.x).toFloat()
-        //nonShipList.add(when {
-            /*(objectsToSpawn[6] && Math.random()<.01) ->
-                IceDisciple(Point((Math.random() * view.size.x).toFloat(), yOffset), this)
-
-            (objectsToSpawn[5] && Math.random()<.01) ->
-                FlameDisciple(Point((Math.random() * view.size.x).toFloat(), yOffset), this)
-            (objectsToSpawn[4] && Math.random()<.1) ->
-                EnemySatellite(rad, Math.random().toFloat()*2+1, Point(if (Math.random()>.5) 0f else view.size.x, -rad + yOffset), this)
-
-            (objectsToSpawn[3] && Math.random()<.1 && status != GameStatus.BeforeNormal) ->
-                EnemyPinkAsteroid(rad, Point((Math.random() * view.size.x).toFloat(), -rad + yOffset), this)
-
-            (objectsToSpawn[2] && Math.random()<.07) ->
-                FuelCan(Math.random()<.03, Point((Math.random() * view.size.x).toFloat(), -rad + yOffset), this)
-
-            (objectsToSpawn[1] && Math.random()<.2) ->
-                Coin(Math.random()<.03, Point((Math.random() * view.size.x).toFloat(), -rad + yOffset), this)
-
-            objectsToSpawn[0] ->
-                EnemyShooter(rad, Point((Math.random() * view.size.x).toFloat(), -rad + yOffset), this)
-
-            else ->
-                BlankExtraObject()*/
-        //})
+        nonShipList.add(when {
+            (Math.random()<1) -> EnemyShooter(Point3(
+                    if (Math.random()<.25) Point(0f,Math.random().toFloat()*view.eyeSize.y)
+                    else if (Math.random()<.25) Point(view.eyeSize.x,Math.random().toFloat()*view.eyeSize.y)
+                    else if (Math.random()<.25) Point(Math.random().toFloat()*view.eyeSize.x,0f)
+                    else Point(Math.random().toFloat()*view.eyeSize.x,view.eyeSize.y)
+                    ,if(Math.random()<.5)VRView.Eye.Left else VRView.Eye.Right),this)
+            else -> error("this should not appear")
+        })
     }
 
-    fun tick() {
+    private fun tick() {
         countdownVariable -= oneOverFps/5
         if (countdownVariable<0) {
             countdownVariable = .5f
             addRandomObject()
         }
+
+        val extraObjectsToRemove = mutableListOf<ExtraObject>()
+        nonShipList.forEach {
+            it.move()
+            shipList.forEach { ship -> if (it.isIn(ship.loc.p) && it.loc.eye == ship.loc.eye) it.touchEffect(ship) }
+            if (it.canKill)
+                extraObjectsToRemove.add(it)
+        }
+        extraObjectsToRemove.forEach { nonShipList.remove(it) }
+
+        val shipsToRemove = mutableListOf<Ship>()
+        shipList.forEach {
+            if (it.canKill)
+                shipsToRemove.add(it)
+            else
+                it.move()
+        }
+        shipsToRemove.forEach { shipList.remove(it) }
     }
     fun draw(canv: Canvas) {
         shipList.forEach { it.draw(canv) }

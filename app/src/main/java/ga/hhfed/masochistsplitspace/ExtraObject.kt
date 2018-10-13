@@ -12,5 +12,5 @@ interface ExtraObject {
     fun touchEffect(ship: Ship)
     fun move()
     fun draw(canvas: Canvas)
-    val loc: Point
+    val loc: Point3
 }
