@@ -28,7 +28,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
     private fun addRandomObject() {
         nonShipList.add(when {
-            (Math.random()<1) -> EnemyShooter(Point3(
+            (Math.random()<1) -> EnemySineMan(Point3(
                     if (Math.random()<.25) Point(0f,Math.random().toFloat()*view.eyeSize.y)
                     else if (Math.random()<.25) Point(view.eyeSize.x,Math.random().toFloat()*view.eyeSize.y)
                     else if (Math.random()<.25) Point(Math.random().toFloat()*view.eyeSize.x,0f)
