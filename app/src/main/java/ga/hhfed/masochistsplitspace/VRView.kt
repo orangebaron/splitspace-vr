@@ -54,9 +54,9 @@ class VRView: View {
         func(points.map {
             Point3(
                 if (it.eye == Eye.Left)
-                    Point(width - it.p.y - 120, it.p.x + 227-80)
+                    Point(width - it.p.y - 120, it.p.x + 227-40)
                 else
-                    Point(width - it.p.y - 120, it.p.x + 145-80 + height / 2)
+                    Point(width - it.p.y - 120, it.p.x + 145-40 + height / 2)
             , it.eye)
         })
     }
@@ -80,7 +80,7 @@ class VRView: View {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
     val tiltManager = TiltManager(context as MainActivity)
-    
+
     init {
         setBackgroundColor(Color.rgb(0,0,40))
         systemUiVisibility = barsHidden

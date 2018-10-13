@@ -38,6 +38,8 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         })
     }
 
+    private data class MotionState(var lookingUp: Boolean=false, var lookingDown: Boolean=false, var turningRight: Boolean=false, var turningLeft: Boolean=false)
+    private var lastMotionState = MotionState()
     private fun tick() {
         countdownVariable -= oneOverFps/5
         if (countdownVariable<0) {
@@ -62,6 +64,24 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
                 it.move()
         }
         shipsToRemove.forEach { shipList.remove(it) }
+
+        //MOTION STUFF
+        val currentMotionState = MotionState(
+            lookingUp = view.tiltManager.nodAngle>.35,
+            lookingDown = view.tiltManager.nodAngle<-.35,
+            turningRight = view.tiltManager.LRturnSpeed<-2,
+            turningLeft = view.tiltManager.LRturnSpeed>2
+        )
+        if (currentMotionState != lastMotionState) {
+            //println("UWE- $currentMotionState $lastMotionState")
+            if (currentMotionState.turningRight && shipList[0].loc.eye==VRView.Eye.Left) {
+                shipList.forEach { it.loc.eye = VRView.Eye.Right }
+            } else if (currentMotionState.turningLeft && shipList[0].loc.eye==VRView.Eye.Right) {
+                shipList.forEach { it.loc.eye = VRView.Eye.Left }
+            }
+            lastMotionState = currentMotionState
+        }
+
         view.invalidate()
     }
     fun draw(canv: Canvas) {
