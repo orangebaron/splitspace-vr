@@ -11,22 +11,23 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.thread
 import kotlin.concurrent.timerTask
 
-class Game(val fps: Int, val loadedResources: LoadedResources, val view: VRView){
-    //render, and tick
-    var speed = 5f/fps
+class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     private val oneOverFps = 1f/fps
+    var speed = 5*oneOverFps
 
     enum class Powerup {
         Split, // Splits
         Ghost, // Temporary Invulnerability (needs them GRAPHICS)
         Laser, // Shoots a LASER
-        Agility, // Increases mobility (side to side non-jumping motion)
+        Agility // Increases mobility (side to side non-jumping motion)
     }
     enum class GameDefinitions{
         AddObj, // add enemy or object specified by number
         RemoveObj,
         ChangeSpeed, // change speed; the associated number is multiplied by size.y/(fps*100) to get the real value
     }
+    val mainPowerup = Powerup.Split //TODO:set this later or something
+    val sidePowerup: Powerup? = null
 
     var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
