@@ -72,7 +72,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         }
     }
 
-    var pillcountdownVariable = 100f
+    var pillcountdownVariable = 10f
     private var pillExists = false
     private fun tick() {
         if (shipList.size == 0) {
@@ -87,9 +87,11 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
             countdownVariable = .5f
             addRandomObject()
         }
-        pillcountdownVariable -= oneOverFps / 5
-        if(pillcountdownVariable < 0 && !pillExists){
+        pillcountdownVariable -= oneOverFps / 5f
+        if(pillcountdownVariable <= 0 && !pillExists){
+            println("let there be pill")
             pillcountdownVariable = 100f
+            addPill()
             pillExists = true
         }
 
