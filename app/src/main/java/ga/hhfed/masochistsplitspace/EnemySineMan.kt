@@ -19,29 +19,23 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
 
     override fun move(){
         //loc.p = Point(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle))*20, 20*sin(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle))))
-        tickup();
+        tickup()
         loc.p = Point((((ticks)*cos(axisAngle) + sin(ticks)*sin(axisAngle))*sizeFactor).toFloat() + startx, starty + (sizeFactor*6f/5f)*((-1f)*(ticks)*(sin(axisAngle))+sin(ticks)*cos(axisAngle)).toFloat())
         //loc.p = Point(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle)), sin((-1)*(loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle)))
-        when (loc.p.x){
-            game.view.eyeSize.x -> canKill = true
-            0f -> canKill = true
-            else -> {
-                when(loc.p.y){
-                    game.view.eyeSize.y -> canKill = true
-                    0f -> canKill = true
-                }
-            }
-        }
     }
 
 
     override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
-    override var canKill = false //todo set die command or autodone?
+    override val canKill
+        get() = loc.p.y-radius > game.view.eyeSize.y ||
+                loc.p.y < 0 ||
+                loc.p.x > game.view.eyeSize.x ||
+                loc.p.x < 0
     private val bitmap: Bitmap
     init {
         val matrix = Matrix()
-        //matrix.setRotate(angle-90) //chjange to appropriate thing
-        val base = game.loadedResources.shooter //TODO MAKE SINEMAN GRAPHIC
+        matrix.setRotate(90f) //chjange to appropriate thing
+        val base = game.loadedResources.signMan //TODO MAKE SINEMAN GRAPHIC
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     private val radius = (bitmap.height+bitmap.width)/2
