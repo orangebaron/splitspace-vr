@@ -25,7 +25,7 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
     }
 
 
-    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
+    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y+radius
     override val canKill
         get() = loc.p.y-radius > game.view.eyeSize.y ||
                 loc.p.y < 0 ||

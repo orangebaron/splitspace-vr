@@ -26,7 +26,7 @@ class Ship(var loc: Point3, private val skin: Bitmap, var speed: Point, private 
     var speedMultiplier = 1f
     var canKill = false
         //get() = field || loc.p.y > game.view.eyeSize.y || loc.p.x < 0f || loc.p.x > game.view.eyeSize.x
-        //private set
+        private set
 
     fun explode() {
         canKill = true

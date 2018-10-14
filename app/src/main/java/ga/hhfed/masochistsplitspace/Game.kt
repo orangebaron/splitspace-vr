@@ -68,10 +68,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         }
 
         if (ghostTimer > 0f) {
-            shipList.forEach {
-                it.canKill = true
-            }
-            ghostTimer -= this.speed
+            ghostTimer -= this.oneOverFps
         }
 
         if (agilityTimer == 0f) {
@@ -91,7 +88,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
         val shipsToRemove = mutableListOf<Ship>()
         shipList.forEach {
-            if (it.canKill)
+            if (it.canKill && ghostTimer <= 0f)
                 shipsToRemove.add(it)
             else
                 it.move()

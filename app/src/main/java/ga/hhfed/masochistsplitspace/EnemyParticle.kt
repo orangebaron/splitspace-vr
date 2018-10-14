@@ -5,8 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import kotlin.math.atan
 
-class EnemyParticle(override var loc: Point3, val shiploc: Point3, private val game: Game): Enemy{
-    override fun isIn (p: Point): Boolean = false//p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
+class EnemyParticle(override var loc: Point3, shiploc: Point3, private val game: Game): Enemy{
+    override fun isIn (p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y+radius
     private val speed = ((shiploc.p-loc.p)/(shiploc.p-loc.p).size)*100f
     override fun move() {
         loc = Point3(loc.p+speed*game.oneOverFps,loc.eye)

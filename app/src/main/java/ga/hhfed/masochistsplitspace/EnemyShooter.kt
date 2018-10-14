@@ -6,7 +6,7 @@ import android.graphics.Matrix
 import kotlin.math.atan
 
 class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
-    override fun isIn(p: Point): Boolean = false//p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
+    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y+radius
 
     private val arbval = .6f //arbitrary value, defining how fast it moves
     private val timeSpentOnScreen = 200f //arbitrary value change later (make divisible by 5)
@@ -73,6 +73,7 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     override var canKill = false
+    private val radius = (bitmap.width+bitmap.height)/2
 
     override fun draw(canvas: Canvas) {
         game.view.drawBmpForEye(canvas, bitmap, loc)
