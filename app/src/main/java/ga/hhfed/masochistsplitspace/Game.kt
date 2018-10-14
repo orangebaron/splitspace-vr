@@ -75,9 +75,9 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         if (currentMotionState != lastMotionState) {
             //println("UWE- $currentMotionState $lastMotionState")
             if (currentMotionState.turningRight && shipList[0].loc.eye==VRView.Eye.Left) {
-                shipList.forEach { it.loc.eye = VRView.Eye.Right; it.residualTurnSpeed = Point(0f,0f) }
+                shipList.forEach { it.loc.eye = VRView.Eye.Right }
             } else if (currentMotionState.turningLeft && shipList[0].loc.eye==VRView.Eye.Right) {
-                shipList.forEach { it.loc.eye = VRView.Eye.Left; it.residualTurnSpeed = Point(0f,0f) }
+                shipList.forEach { it.loc.eye = VRView.Eye.Left }
             }
             lastMotionState = currentMotionState
         }
