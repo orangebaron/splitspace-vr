@@ -101,9 +101,8 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
         for(i in 0 until addToNonShipList.size){
             nonShipList.add(addToNonShipList[i])
-            addToNonShipList.remove(addToNonShipList[i])
         } //Doesn't really make sense but it will do; TODO fix this
-
+        addToNonShipList.clear()
         //MOTION STUFF
         val currentMotionState = MotionState(
                 lookingUp = view.tiltManager.nodAngle > .35,
@@ -131,18 +130,18 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
                     for (i in 0 until (shipList.size)) {
                         shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), view.loadedResources.shipTest, Point(shipList[i].speed.x * (-1f), shipList[i].speed.y), this))
                     }
-                } else println("lol you can't use your power up") //some pop up saying something along those lines
+                }//some pop up saying something along those lines
             }
             Powerup.Ghost -> {
                 if (checkifPowerup()) {
                     //change ship's bitmap
                     ghostTimer = 20f
-                } else println("lol you can't use your power up") //some pop up saying something along those lines
+                }    //some pop up saying something along those lines
             }
             Powerup.Laser -> {
                 if (checkifPowerup()) {
                     //do
-                } else println("lol you can't use your power up") //some pop up saying something along those lines
+                }   //some pop up saying something along those lines
             }
             Powerup.Agility -> {
                 if (checkifPowerup()) {
@@ -150,7 +149,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
                         it.speedMultiplier = 1.5f
                     }
                     agilityTimer = 40f
-                } else println("lol you can't use your power up") //some pop up saying something along those lines
+                }  //some pop up saying something along those lines
             }
         }
         mainPowerAct = false

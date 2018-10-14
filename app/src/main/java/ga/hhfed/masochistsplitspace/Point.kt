@@ -1,6 +1,6 @@
 package ga.hhfed.masochistsplitspace
 
-class Point (val x: Float, val y: Float) {
+class Point (var x: Float, var y: Float) {
     operator fun plus (p: Point) = Point(this.x + p.x, this.y + p.y)
     operator fun minus (p: Point) = Point(this.x - p.x, this.y - p.y)
     operator fun times (p: Point) = Point(this.x * p.x, this.y * p.y)

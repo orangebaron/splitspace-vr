@@ -10,7 +10,7 @@ class Ship(var loc: Point3, private val skin: Bitmap, var speed: Point, private 
     var speedMultiplier = 1f
     fun move() {
         if ((loc.p.x>game.view.eyeSize.x || loc.p.x<0f) && speed.x*loc.p.x>0) speed = Point(-speed.x,speed.y)
-        if (loc.p.y>game.view.eyeSize.y || loc.p.y<0f && speed.y*loc.p.y>0) speed = Point(speed.x,-speed.y)
+        if ((loc.p.y>game.view.eyeSize.y || loc.p.y<0f) && speed.y*loc.p.y>0) speed = Point(speed.x,-speed.y)
         speed += Point(game.view.tiltManager.LRsteerAngle,-game.view.tiltManager.nodAngle.toFloat()*30)*game.oneOverFps*speedMultiplier
         if (speed.size>20f*speedMultiplier) speed = speed*(20f*speedMultiplier)/speed.size
         loc.p += speed * game.speed //create appropriate move thing

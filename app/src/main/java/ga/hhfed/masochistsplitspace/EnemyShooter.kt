@@ -3,17 +3,21 @@ package ga.hhfed.masochistsplitspace
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
+import kotlin.math.atan
 
-class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
-    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
+class EnemyShooter(override val loc: Point3, private val game: Game): Enemy {
+    override fun isIn(p: Point): Boolean = false//p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
 
-    private val arbval = 20f //arbitrary value, defining how fast it moves
+    private val arbval = .6f //arbitrary value, defining how fast it moves
     private val timeSpentOnScreen = 200f //arbitrary value change later (make divisible by 5)
     private var timeRemainingOnScreen = timeSpentOnScreen
     private var movex = 0 /*if 0, no movement, if 1, positive movement, if -1, negative movement*/
     private var movey = 0 /*if 0, no movement, if 1, positive movement, if -1, negative movement*/
+    private var doneOnce = false
+    private var doneNone = true
     override fun move(){
         if (timeRemainingOnScreen == timeSpentOnScreen){
+            println("shoot boi lives")
             when (loc.p.x){
                 0f -> movex = 1
                 game.view.eyeSize.x -> movex = -1
@@ -27,52 +31,59 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
                     }
                 }
             }
-        } else if (timeRemainingOnScreen >= (timeSpentOnScreen*4/5)){
+        } else if (timeRemainingOnScreen >= (timeSpentOnScreen*4f/5f)){
+            println("I should be moving " + "movex: " + movex + "   movey: " + movey)
+            println("loc.p.x: " + loc.p.x + "    loc.p.y: " + loc.p.y)
             when(movex){
-                1 -> loc.p.x + game.speed/arbval
-                -1 -> loc.p.x - game.speed/arbval
+                1 -> loc.p = Point(loc.p.x + game.speed/arbval, loc.p.y)
+                -1 -> loc.p = Point(loc.p.x - game.speed/arbval, loc.p.y)
                 else -> {
                     when(movey){
-                        1 -> loc.p.y + game.speed/arbval
-                        -1 -> loc.p.y + game.speed/arbval
+                        1 -> loc.p = Point(loc.p.x, loc.p.y + game.speed/arbval)
+                        -1 -> loc.p = Point(loc.p.x, loc.p.y - game.speed/arbval)
                         else -> println("EnemyShooter not moving good")
                     }
                 }
             }
-        } else if (timeRemainingOnScreen == (timeSpentOnScreen*3/5)|| timeRemainingOnScreen == (timeSpentOnScreen*(2/5))) {
+        } else if (doneNone && timeRemainingOnScreen>=(timeSpentOnScreen*2f/5f)) {
+            println("enemyparticle added")
+            doneNone = false
+            doneOnce = true
             game.addToNonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
-        } else if (timeRemainingOnScreen == (timeSpentOnScreen/5)){
-            movex = movex * -1
-            movey = movey * -1
+        } else if (doneOnce &&timeRemainingOnScreen>=(timeSpentOnScreen/5f)){
+            doneOnce = false
+            game.addToNonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
         }
-        else if (timeRemainingOnScreen < (timeSpentOnScreen/5)){
-            when(movex){
-                1 -> loc.p.x + 2f*game.speed/arbval
-                -1 -> loc.p.x - 2f*game.speed/arbval
-                else -> {
-                    when(movey){
-                        1 -> loc.p.y + 2f*game.speed/arbval
-                        -1 -> loc.p.y - 2f*game.speed/arbval
-                        else -> println("EnemyShooter not moving good")
+                else if (timeRemainingOnScreen > 0){
+                    println("goin bak")
+                    when(movex){
+                        1 -> loc.p = Point(loc.p.x - game.speed/arbval, loc.p.y)
+                        -1 -> loc.p = Point(loc.p.x + game.speed/arbval, loc.p.y)
+                        else -> {
+                            when(movey){
+                                1 -> loc.p = Point(loc.p.x, loc.p.y - game.speed/arbval)
+                                -1 -> loc.p = Point(loc.p.x, loc.p.y + game.speed/arbval)
+                                else -> println("EnemyShooter not moving good")
+                            }
+                        }
                     }
+                } else{
+                    canKill = true
                 }
-            }
-        }
+                    println(timeRemainingOnScreen)
+                    timeRemainingOnScreen -= game.speed
     }
     private val bitmap: Bitmap
-
+    private var slope = (game.shipList[0].loc.p.y - loc.p.y)/(game.shipList[0].loc.p.x  - loc.p.x)
     init {
         val matrix = Matrix()
-        //matrix.setRotate(angle-90) //chjange to appropriate thing
+        matrix.setRotate((atan(slope)*(180f/3.14159265)).toFloat()) //chjange to appropriate thing
         val base = game.loadedResources.shooter
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     private var radius = (bitmap.height+bitmap.width)/2
-    override val canKill
-        get() = loc.p.y-radius > game.view.eyeSize.y ||
-                loc.p.y < 0 ||
-                loc.p.x > game.view.eyeSize.x ||
-                loc.p.x < 0
+    override var canKill = false
+
     override fun draw(canvas: Canvas) {
         game.view.drawBmpForEye(canvas, bitmap, loc)
     }
