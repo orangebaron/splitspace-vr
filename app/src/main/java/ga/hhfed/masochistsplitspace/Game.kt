@@ -56,6 +56,13 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     }
 
     private fun tick() {
+        if (shipList.size == 0) {
+            if(view.tiltManager.LRsteerAngle>6 || view.tiltManager.LRsteerAngle<-6)
+                shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),Point(5f,5f), this))
+            view.invalidate()
+            return
+        }
+
         countdownVariable -= oneOverFps / 5
         if (countdownVariable < 0) {
             countdownVariable = .5f
@@ -112,6 +119,11 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         try {
             shipList.forEach { it.draw(canv) }
             nonShipList.forEach { it.draw(canv) }
+            if (shipList.size == 0) {
+                val img = loadedResources.shipTest
+                view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Left))
+                view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Right))
+            }
         } catch (e: Throwable) {
             println("UWE-ERR drawing $e")
         }

@@ -7,6 +7,7 @@ class PowerupPill(override val loc: Point3, private val powerup: Game.Powerup, p
     override fun move(){}
     private val bitmap = game.loadedResources.flame //TODO pill thing
     override var canKill = false
+    override var streamid: Int = -1
     override fun touchEffect(ship: Ship) {
         game.activatePowerup(powerup)
         canKill = true
