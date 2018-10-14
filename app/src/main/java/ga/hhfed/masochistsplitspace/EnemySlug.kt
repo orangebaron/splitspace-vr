@@ -26,7 +26,7 @@ class EnemySlug(override var loc: Point3, private val game: Game): Enemy{
         loc = Point3(Point((loc.p.x + xspeed).toFloat(), (loc.p.y + yspeed).toFloat()),loc.eye)
         accel()
     }
-    override var streamid = -1
+    override var streamid = game.loadedResources.moistNoises
 
     private val bitmap: Bitmap
     init {

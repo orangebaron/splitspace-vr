@@ -54,7 +54,7 @@ class VRView: View {
         func(points.map {
             Point3(
                 if (it.eye == Eye.Left)
-                    Point(width - it.p.y - 120, it.p.x + 227-40)
+                    Point(width - it.p.y - 120 , it.p.x + 227-40)
                 else
                     Point(width - it.p.y - 120, it.p.x + 145-40 + height / 2)
             , it.eye)
@@ -62,7 +62,7 @@ class VRView: View {
     }
 
     fun drawBmpForEye(canv: Canvas, bmp: Bitmap, point: Point3, paint: Paint = bmpPaint) = drawForEye(listOf(point)) {
-        canv.drawBitmap(bmp, it[0].p.x-bmp.height, it[0].p.y, paint)
+        canv.drawBitmap(bmp, it[0].p.x-bmp.width, it[0].p.y, paint)
     }
 
     //can add more draw functions if necessary

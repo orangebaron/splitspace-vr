@@ -3,7 +3,7 @@ package ga.hhfed.masochistsplitspace
 import android.graphics.Canvas
 
 class PowerupPill(override val loc: Point3, private val powerup: Game.Powerup, private val game: Game): ExtraObject {
-    override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+bitmap.height && p.y < loc.p.y+bitmap.width
+    override fun isIn(p: Point): Boolean = p.x > loc.p.x-bitmap.height && p.y > loc.p.y-bitmap.width && p.x < loc.p.x+2*bitmap.height && p.y < loc.p.y+2*bitmap.width
     override fun move(){}
     private val bitmap = when (powerup) {
         Game.Powerup.Split -> game.loadedResources.redPill

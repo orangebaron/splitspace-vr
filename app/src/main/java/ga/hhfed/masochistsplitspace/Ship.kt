@@ -9,8 +9,8 @@ class Ship(var loc: Point3, var speed: Point, private val game: Game) { /*add ga
         val matrix = Matrix()
         matrix.setRotate(Math.toDegrees(Math.atan2(speed.y.toDouble(),speed.x.toDouble())).toFloat()+180) //XDIRECTION WEE OOO WEE OOO
 
-        val base = if(game.ghostTimer > 0) game.loadedResources.shipTest else
-            (if(game.agilityTimer > 0) game.loadedResources.shipTest else game.loadedResources.shipTest)
+        val base = if(game.ghostTimer > 0) game.loadedResources.ghost else
+            (if(game.agilityTimer > 0) game.loadedResources.agility else game.loadedResources.shipTest) //TODO AGILITY KID
         bitmap = Bitmap.createBitmap(base,0,0, base.width, base.height, matrix,false)
     }
     private var timeUntilSwitchAngle = 0f
@@ -19,7 +19,7 @@ class Ship(var loc: Point3, var speed: Point, private val game: Game) { /*add ga
         if (speed.size>20f*speedMultiplier) speed = speed*(20f*speedMultiplier)/speed.size
         if ((loc.p.x>game.view.eyeSize.x || loc.p.x<0f) && speed.x*loc.p.x>0) speed = Point(-speed.x,speed.y)
         if ((loc.p.y>game.view.eyeSize.y || loc.p.y<0f) && speed.y*loc.p.y>0) speed = Point(speed.x,-speed.y)
-        loc = Point3(loc.p+(speed * game.speed),loc.eye) //create appropriate move thing
+        loc = Point3(loc.p+(speed * game.speed*1.5f),loc.eye)  //create appropriate move thing
         timeUntilSwitchAngle-=game.oneOverFps
         if (timeUntilSwitchAngle<=0) recalculateBitmap()
     }
@@ -29,8 +29,10 @@ class Ship(var loc: Point3, var speed: Point, private val game: Game) { /*add ga
         private set
 
     fun explode() {
-        canKill = true
-        game.loadedResources.playSound(streamid, 1f)
+        if (!(game.ghostTimer > 0)) {
+            canKill = true
+            game.loadedResources.playSound(streamid, 1f)
+        }
         //game.runSafelyThreaded("(Ship)addExplosion",3){game.addExplosion(loc)} //note this
     }
 

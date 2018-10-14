@@ -23,13 +23,13 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
     private fun addRandomObject() {
         nonShipList.add(when {
-            (Math.random()<.25) -> EnemySineMan(edgeSpawning,this)
-            (Math.random()<.50) -> EnemyLineMan(edgeSpawning, this)
-            (Math.random()<=1) -> EnemyShooter(edgeSpawning, this)
-            else -> error("this should not appear")
+            (Math.random()<.125) -> EnemyShooter(edgeSpawning, this)
+            (Math.random()<.5) -> EnemySineMan(edgeSpawning,this)
+            else -> EnemyLineMan(edgeSpawning, this)
         })
     }
-    var pillEye = VRView.Eye.Left
+    val pillEye: VRView.Eye
+        get() = randoEye()
     private fun randoEye (): VRView.Eye{
         return when{
             (Math.random()<.5) -> VRView.Eye.Left
@@ -40,8 +40,8 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     private fun addPill(){
         nonShipList.add(when {
                     (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Split, this)
-            (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Ghost, this)
-            (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Agility, this)
+            (Math.random()<.5) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Ghost, this)
+            (Math.random()<1) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Agility, this)
             else -> error("should be impossibru Uwe-error")
         })
         pillExists = true
@@ -56,41 +56,45 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
                 ,if(Math.random()<.5)VRView.Eye.Left else VRView.Eye.Right)
 
     fun activatePowerup(p: Powerup) {
+        pillExists = false
         when (p) {
             Powerup.Split ->
                 for (i in 0 until (shipList.size)) {
                     shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), Point(shipList[i].speed.x * (-1f)+(if (shipList[i].speed.x>0) -10 else 10), shipList[i].speed.y), this))
                 }
             Powerup.Ghost ->
-                ghostTimer = 20f
+                ghostTimer = 15f
             Powerup.Agility -> {
                 shipList.forEach {
                     it.speedMultiplier = 1.5f
                 }
-                agilityTimer = 40f
+                agilityTimer = 20f
             }
         }
     }
 
-    var pillcountdownVariable = 10f
+    var pillcountdownVariable = 0f
     private var pillExists = false
     private fun tick() {
         if (shipList.size == 0) {
-            if(view.tiltManager.LRsteerAngle>6 || view.tiltManager.LRsteerAngle<-6)
-                shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),Point(5f,5f), this))
+            if(view.tiltManager.LRsteerAngle>6 || view.tiltManager.LRsteerAngle<-6) {
+                shipList = mutableListOf(Ship(Point3(Point(0f, 0f), VRView.Eye.Left), Point(5f, 5f), this))
+                nonShipList = mutableListOf()
+                pillExists = false
+            }
             view.invalidate()
             return
         }
 
-        countdownVariable -= oneOverFps / 5
+        countdownVariable -= oneOverFps
         if (countdownVariable < 0) {
             countdownVariable = .5f
             addRandomObject()
         }
-        pillcountdownVariable -= oneOverFps / 5f
+        if (!pillExists) pillcountdownVariable -= oneOverFps
         if(pillcountdownVariable <= 0 && !pillExists){
             println("let there be pill")
-            pillcountdownVariable = 100f
+            pillcountdownVariable = 10f
             addPill()
             pillExists = true
         }

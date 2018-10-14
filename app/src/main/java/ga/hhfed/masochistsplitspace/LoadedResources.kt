@@ -22,6 +22,9 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
     val bluePill: Bitmap = scaledBmp(R.drawable.bluepill, 1/20f)
     val greenPill: Bitmap = scaledBmp(R.drawable.greenpill, 1/20f)
     val gameOverScreen: Bitmap = scaledBmp(R.drawable.gameover, 1f)
+    val ghost: Bitmap = scaledBmp(R.drawable.ghost, 1/20f)
+    val agility: Bitmap = scaledBmp(R.drawable.agility, 1/20f)
+    val slug: Bitmap = scaledBmp(R.drawable.slug, 1/10f)
 
     fun playSound(soundID: Int, volume: Float, rate: Float = 1f, loop: Int = 0) : Int{
         return sounds.play(soundID, volume, volume, 0, loop, rate)

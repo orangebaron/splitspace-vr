@@ -12,7 +12,7 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
     private val starty = loc.p.y
     private var ticks = 0f
     private val negOne = -1f
-    private val sizeFactor = 60f
+    private val sizeFactor = 80f
     private fun tickup(){
         ticks += game.speed/4f
     }
@@ -34,10 +34,10 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
     private val bitmap: Bitmap
     override var streamid = game.loadedResources.signManNoise
     init {
-        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, .75f)}
+        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, .05f)}
         val matrix = Matrix()
         matrix.setRotate(90f) //chjange to appropriate thing
-        val base = game.loadedResources.signMan //TODO MAKE SINEMAN GRAPHIC
+        val base = game.loadedResources.signMan //
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
     private val radius = (bitmap.height+bitmap.width)/2
