@@ -5,7 +5,11 @@ import android.graphics.Canvas
 class PowerupPill(override val loc: Point3, private val powerup: Game.Powerup, private val game: Game): ExtraObject {
     override fun isIn(p: Point): Boolean = p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+bitmap.height && p.y < loc.p.y+bitmap.width
     override fun move(){}
-    private val bitmap = game.loadedResources.flame //TODO pill thing
+    private val bitmap = when (powerup) {
+        Game.Powerup.Split -> game.loadedResources.redPill
+        Game.Powerup.Agility -> game.loadedResources.greenPill
+        Game.Powerup.Ghost -> game.loadedResources.bluePill
+    }
     override var canKill = false
     override var streamid: Int = -1
     override fun touchEffect(ship: Ship) {
