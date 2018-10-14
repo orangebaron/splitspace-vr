@@ -122,7 +122,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
             shipList.forEach { it.draw(canv) }
             nonShipList.forEach { it.draw(canv) }
             if (shipList.size == 0) {
-                val img = loadedResources.shipTest
+                val img = loadedResources.gameOverScreen
                 view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Left))
                 view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Right))
             }
