@@ -8,6 +8,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     val oneOverFps = 1f/fps
     var speed = 5*oneOverFps
 
+
     enum class Powerup {
         Split, // Splits
         Ghost, // Temporary Invulnerability (needs them GRAPHICS)
@@ -20,7 +21,10 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         ChangeSpeed, // change speed; the associated number is multiplied by size.y/(fps*100) to get the real value
     }
     val mainPowerup = Powerup.Split //TODO:set this later or something
+    var mainPowerAct = false
+    var mainPowerCooldown = 0f
     val sidePowerup: Powerup? = null
+    val sidePowerAct = false
 
     var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
@@ -28,15 +32,20 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
     private fun addRandomObject() {
         nonShipList.add(when {
-            (Math.random()<1) -> EnemySineMan(Point3(
-                    if (Math.random()<.25) Point(0f,Math.random().toFloat()*view.eyeSize.y)
-                    else if (Math.random()<.25) Point(view.eyeSize.x,Math.random().toFloat()*view.eyeSize.y)
-                    else if (Math.random()<.25) Point(Math.random().toFloat()*view.eyeSize.x,0f)
-                    else Point(Math.random().toFloat()*view.eyeSize.x,view.eyeSize.y)
-                    ,if(Math.random()<.5)VRView.Eye.Left else VRView.Eye.Right),this)
+            (Math.random()<.25) -> EnemySineMan(edgeSpawning,this)
+            (Math.random()<.50) -> EnemyLineMan(edgeSpawning, this)
+            (Math.random()<=1) -> EnemyShooter(edgeSpawning, this)
             else -> error("this should not appear")
         })
     }
+
+    private val edgeSpawning
+        get() = Point3(
+            if (Math.random()<.25) Point(0f,Math.random().toFloat()*view.eyeSize.y)
+            else if (Math.random()<.25) Point(view.eyeSize.x,Math.random().toFloat()*view.eyeSize.y)
+            else if (Math.random()<.25) Point(Math.random().toFloat()*view.eyeSize.x,0f)
+            else Point(Math.random().toFloat()*view.eyeSize.x,view.eyeSize.y)
+                ,if(Math.random()<.5)VRView.Eye.Left else VRView.Eye.Right)
 
     private data class MotionState(var lookingUp: Boolean=false, var lookingDown: Boolean=false, var turningRight: Boolean=false, var turningLeft: Boolean=false)
     private var lastMotionState = MotionState()
@@ -45,6 +54,15 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         if (countdownVariable<0) {
             countdownVariable = .5f
             addRandomObject()
+        }
+
+        when (mainPowerup){
+            Powerup.Split -> {
+                if (mainPowerAct && (mainPowerCooldown==0f)){
+                    mainPowerCooldown = 100f
+                }
+                else println("lol you can't use your power up") //some pop up saying something along those lines
+            }
         }
 
         val extraObjectsToRemove = mutableListOf<ExtraObject>()
