@@ -38,7 +38,7 @@ class VRView: View {
                 for (y in listOf(0f,eyeSize.y/2-loadedResources.shipTest.width/2,eyeSize.x-loadedResources.shipTest.width))
                     for (eye in listOf(Eye.Left,Eye.Right))
                         drawBmpForEye(canvas,loadedResources.shipTest,Point3(Point(x,y),eye))
-            }*/
+            }*/ //CALIBRATION
         canv?.let(game::draw)
         systemUiVisibility = barsHidden
     }

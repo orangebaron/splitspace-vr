@@ -84,15 +84,15 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
         view.invalidate()
     }
-    fun draw(canv: Canvas) {
+    fun draw(canv: Canvas) { try {
         shipList.forEach { it.draw(canv) }
         nonShipList.forEach { it.draw(canv) }
-    }
+    } catch (e: Throwable) {println("UWE-ERR $e")}}
 
 
     val timer = Timer()
     init {
-        timer.scheduleAtFixedRate(timerTask{ tick() }, (1000 * oneOverFps).toLong(), (1000 * oneOverFps).toLong())
+        timer.scheduleAtFixedRate(timerTask{ try { tick()} catch (e: Throwable) {println("UWE-ERR $e")} }, (1000 * oneOverFps).toLong(), (1000 * oneOverFps).toLong())
     }
 
 }
