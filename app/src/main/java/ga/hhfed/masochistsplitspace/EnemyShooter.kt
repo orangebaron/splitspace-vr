@@ -40,7 +40,7 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
                 }
             }
         } else if (timeRemainingOnScreen == (timeSpentOnScreen*3/5)|| timeRemainingOnScreen == (timeSpentOnScreen*(2/5))) {
-            game.nonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
+            game.addToNonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
         } else if (timeRemainingOnScreen == (timeSpentOnScreen/5)){
             movex = movex * -1
             movey = movey * -1
