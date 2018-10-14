@@ -61,8 +61,8 @@ class VRView: View {
         })
     }
 
-    fun drawBmpForEye(canv: Canvas, bmp: Bitmap, point: Point3) = drawForEye(listOf(point)) {
-        canv.drawBitmap(bmp, it[0].p.x-bmp.height, it[0].p.y, bmpPaint)
+    fun drawBmpForEye(canv: Canvas, bmp: Bitmap, point: Point3, paint: Paint = bmpPaint) = drawForEye(listOf(point)) {
+        canv.drawBitmap(bmp, it[0].p.x-bmp.height, it[0].p.y, paint)
     }
 
     //can add more draw functions if necessary

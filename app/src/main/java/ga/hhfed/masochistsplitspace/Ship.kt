@@ -1,17 +1,17 @@
 package ga.hhfed.masochistsplitspace
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Paint
+import android.graphics.*
 
 
-class Ship(var loc: Point3, private val skin: Bitmap, var speed: Point, private val game: Game) { /*add game*/
+class Ship(var loc: Point3, var speed: Point, private val game: Game) { /*add game*/
     private fun recalculateBitmap() {
         timeUntilSwitchAngle = .05f
         val matrix = Matrix()
         matrix.setRotate(Math.toDegrees(Math.atan2(speed.y.toDouble(),speed.x.toDouble())).toFloat()+180) //XDIRECTION WEE OOO WEE OOO
-        bitmap = Bitmap.createBitmap(skin,0,0, skin.width, skin.height, matrix,false)
+
+        val base = if(game.ghostTimer > 0) game.loadedResources.shipTest else
+            (if(game.agilityTimer > 0) game.loadedResources.shipTest else game.loadedResources.shipTest)
+        bitmap = Bitmap.createBitmap(base,0,0, base.width, base.height, matrix,false)
     }
     private var timeUntilSwitchAngle = 0f
     fun move() {
@@ -39,7 +39,6 @@ class Ship(var loc: Point3, private val skin: Bitmap, var speed: Point, private 
         recalculateBitmap()
     }
 
-    private val paint = Paint()
     fun draw(canvas: Canvas) {
         game.view.drawBmpForEye(canvas, bitmap, loc)
     }

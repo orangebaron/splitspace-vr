@@ -11,13 +11,12 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     enum class Powerup {
         Split, // Splits
         Ghost, // Temporary Invulnerability (needs them GRAPHICS)
-        Laser, // Shoots a LASER
         Agility // Increases mobility (side to side non-jumping motion)
     }
     var ghostTimer = 0f
     var agilityTimer = 0f
 
-    var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
+    var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
     var addToNonShipList = mutableListOf<ExtraObject>()
     var countdownVariable = .5f
@@ -43,14 +42,10 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         when (p) {
             Powerup.Split ->
                 for (i in 0 until (shipList.size)) {
-                    shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), view.loadedResources.shipTest, Point(shipList[i].speed.x * (-1f), shipList[i].speed.y), this))
+                    shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), Point(shipList[i].speed.x * (-1f)+(if (shipList[i].speed.x>0) -10 else 10), shipList[i].speed.y), this))
                 }
             Powerup.Ghost ->
-                //TODO: change ship's bitmap
                 ghostTimer = 20f
-            Powerup.Laser -> {
-                //do
-            }
             Powerup.Agility -> {
                 shipList.forEach {
                     it.speedMultiplier = 1.5f
