@@ -73,13 +73,14 @@ class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
     private var slope = (game.shipList[0].loc.p.y - loc.p.y)/(game.shipList[0].loc.p.x  - loc.p.x)
     val matrix = Matrix()
     override var streamid: Int = game.loadedResources.shooterNoises
+    override var canKill = false
     init {
-        game.loadedResources.playSound(streamid, 1f)
+        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, 1f)}
         //matrix.setRotate((atan(slope)*(180f/3.14159265)).toFloat()) //chjange to appropriate thing
         val base = game.loadedResources.shooter
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
-    override var canKill = false
+
     private val radius = (bitmap.width+bitmap.height)/2
 
     override fun draw(canvas: Canvas) {

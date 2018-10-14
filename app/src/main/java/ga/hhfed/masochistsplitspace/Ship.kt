@@ -30,18 +30,26 @@ class Ship(var loc: Point3, private val skin: Bitmap, var speed: Point, private 
 
     fun explode() {
         canKill = true
+        game.loadedResources.playSound(streamid, 1f)
         //game.runSafelyThreaded("(Ship)addExplosion",3){game.addExplosion(loc)} //note this
     }
 
     /*private val shipPaint = Paint()*/
-    private lateinit var bitmap: Bitmap
-    init {
-        recalculateBitmap()
+    var streamid = when {
+        (Math.random() < .5) -> game.loadedResources.deathnoise1
+        (Math.random() <= 1) -> game.loadedResources.deathnoise2
+        else -> error("bad error")
     }
 
-    private val paint = Paint()
-    fun draw(canvas: Canvas) {
-        game.view.drawBmpForEye(canvas, bitmap, loc)
-    }
+        private lateinit var bitmap: Bitmap
+        init {
+            recalculateBitmap()
+        }
+
+        private val paint = Paint()
+        fun draw(canvas: Canvas) {
+            game.view.drawBmpForEye(canvas, bitmap, loc)
+        }
+
 }
 

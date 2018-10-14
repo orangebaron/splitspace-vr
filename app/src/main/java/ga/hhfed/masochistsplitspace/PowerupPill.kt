@@ -11,6 +11,7 @@ class PowerupPill(override val loc: Point3, private val powerup: Game.Powerup, p
         game.activatePowerup(powerup)
         canKill = true
     }
+    override var streamid: Int = -1
     override fun draw(canvas: Canvas) {
         game.view.drawBmpForEye(canvas, bitmap, loc)
     }

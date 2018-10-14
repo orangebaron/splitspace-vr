@@ -82,7 +82,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
             it.move()
             shipList.forEach { ship -> if (it.isIn(ship.loc.p) && it.loc.eye == ship.loc.eye) it.touchEffect(ship) }
             if (it.canKill) {
-                try {this.loadedResources.sounds.pause(it.streamid)}
+                try {if(it.streamid>0) {println("sound should die here streamid: " + it.streamid); this.loadedResources.sounds.pause(it.streamid)}}
                 catch (e:Throwable) {(println("Maybe error $e"))}
                 extraObjectsToRemove.add(it)
             }
@@ -98,10 +98,12 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         }
         shipsToRemove.forEach { shipList.remove(it) }
 
-        for(i in 0 until addToNonShipList.size){
-            nonShipList.add(addToNonShipList[i])
+        if (addToNonShipList.size > 0) {
+            for (i in 0 until addToNonShipList.size) {
+                nonShipList.add(addToNonShipList[i])
+            }
+            addToNonShipList = mutableListOf();
         }
-        addToNonShipList.clear()
 
         //MOTION STUFF
         if (view.tiltManager.LRturnSpeed > 2 && shipList[0].loc.eye == VRView.Eye.Left) {

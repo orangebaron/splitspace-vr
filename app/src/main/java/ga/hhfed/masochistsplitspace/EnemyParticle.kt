@@ -15,7 +15,7 @@ class EnemyParticle(override var loc: Point3, shiploc: Point3, private val game:
     private val bitmap: Bitmap
     override var streamid: Int = game.loadedResources.thunderstormyMetal
     init {
-        game.loadedResources.playSound(streamid, .25f)
+        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, 1f)}
         val matrix = Matrix()
         matrix.setRotate((Math.atan2(speed.y.toDouble(),speed.x.toDouble())*(180f/3.14159265)).toFloat()) //change to appropriate thing
         val base = game.view.loadedResources.flame

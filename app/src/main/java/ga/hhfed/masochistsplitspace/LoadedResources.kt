@@ -13,15 +13,14 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
         val base = BitmapFactory.decodeResource(res, r)
         return Bitmap.createScaledBitmap(base, (size * view.eyeSize.x).toInt(), (size * view.eyeSize.x * base.height / base.width).toInt(), false)
     }
-
     val shipTest: Bitmap = scaledBmp(R.drawable.pinkship, 1 / 20f)
     val shooter: Bitmap = scaledBmp(R.drawable.flamedisciple, 1 / 10f)
     val flame: Bitmap = scaledBmp(R.drawable.firefly, 1 / 20f)
     val signMan: Bitmap = scaledBmp(R.drawable.sineman, 1 / 10f)
     val lineMan: Bitmap = scaledBmp(R.drawable.lineman, 1/20f)
 
-    fun playSound(soundID: Int, volume: Float, rate: Float = 1f, loop: Int = 0) {
-        sounds.play(soundID, volume, volume, 0, loop, rate)
+    fun playSound(soundID: Int, volume: Float, rate: Float = 1f, loop: Int = 0) : Int{
+        return sounds.play(soundID, volume, volume, 0, loop, rate)
     }
     val sounds: SoundPool =
             if (Build.VERSION.SDK_INT >= 21)
@@ -36,8 +35,10 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
     val lineManNoise = sounds.load(view.context, R.raw.eyeball_man, 0)
     val shooterNoises = sounds.load(view.context, R.raw.voice007, 0)
     val laserNoises = sounds.load(view.context, R.raw.pew, 0)
-    val moistNoises = sounds.load(view.context, R.raw.moist_noises, 0);
-    val thunderstormyMetal = sounds.load(view.context, R.raw.thunderstormy_metal, 0);
+    val moistNoises = sounds.load(view.context, R.raw.moist_noises, 0)
+    val thunderstormyMetal = sounds.load(view.context, R.raw.thunderstormy_metal, 0)
+    val deathnoise1 = sounds.load(view.context, R.raw.voice008, 0)
+    val deathnoise2 = sounds.load(view.context, R.raw.voice009, 0)
 
     //private val soundtracks: List<MediaPlayer> = listOf(
             /*MediaPlayer.create(context, R.raw.splitspace_theme),

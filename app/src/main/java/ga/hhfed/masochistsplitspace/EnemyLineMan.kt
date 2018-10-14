@@ -21,7 +21,7 @@ class EnemyLineMan(override var loc: Point3, private val game: Game): Enemy{
     private val bitmap: Bitmap
     override var streamid = game.loadedResources.lineManNoise
     init {
-        game.loadedResources.playSound(streamid, 1f)
+        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, 1f)}
         val matrix = Matrix()
         matrix.setRotate((angle*(180f/3.14159265)).toFloat()) //chjange to appropriate thing
         val base = game.loadedResources.lineMan //TODO MAKE LINEMAN GRAPHIC
