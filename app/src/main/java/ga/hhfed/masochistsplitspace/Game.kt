@@ -61,7 +61,6 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         return false
     }
     private fun tick() {
-        println("UWE-tick")
         countdownVariable -= oneOverFps / 5
         if (countdownVariable < 0) {
             countdownVariable = .5f
@@ -157,8 +156,6 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     }
 
     fun draw(canv: Canvas) {
-        println("UWE-draw nonShipListsize: ${nonShipList.size}")
-        println("UWE-draw ShipListsize: ${shipList.size}")
         try {
             shipList.forEach { it.draw(canv) }
             nonShipList.forEach { it.draw(canv) }

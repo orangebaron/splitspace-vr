@@ -10,7 +10,7 @@ class EnemyParticle(override var loc: Point3, val shiploc: Point3, private val g
     private val yintercept = loc.p.y
     private val speedMultiplier = 10f
     override fun move() {
-        loc.p = Point(loc.p.x + game.speed*speedMultiplier,yintercept + loc.p.x * slope*speedMultiplier)
+        loc = Point3(Point(loc.p.x + game.speed*speedMultiplier,yintercept + loc.p.x * slope*speedMultiplier),loc.eye)
     }
     private val slope = ((shiploc.p.y.toDouble()-loc.p.y.toDouble())/(shiploc.p.x.toDouble()-loc.p.x.toDouble())).toFloat()
 

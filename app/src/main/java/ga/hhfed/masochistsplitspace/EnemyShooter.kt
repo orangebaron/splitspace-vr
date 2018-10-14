@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import kotlin.math.atan
 
-class EnemyShooter(override val loc: Point3, private val game: Game): Enemy {
+class EnemyShooter(override var loc: Point3, private val game: Game): Enemy {
     override fun isIn(p: Point): Boolean = false//p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
 
     private val arbval = .6f //arbitrary value, defining how fast it moves
@@ -17,7 +17,7 @@ class EnemyShooter(override val loc: Point3, private val game: Game): Enemy {
     private var doneNone = true
     override fun move(){
         if (timeRemainingOnScreen == timeSpentOnScreen){
-            println("shoot boi lives")
+            println("UWE-shoot boi lives")
             when (loc.p.x){
                 0f -> movex = 1
                 game.view.eyeSize.x -> movex = -1
@@ -32,21 +32,21 @@ class EnemyShooter(override val loc: Point3, private val game: Game): Enemy {
                 }
             }
         } else if (timeRemainingOnScreen >= (timeSpentOnScreen*4f/5f)){
-            println("I should be moving " + "movex: " + movex + "   movey: " + movey)
+            println("UWE-I should be moving " + "movex: " + movex + "   movey: " + movey)
             println("loc.p.x: " + loc.p.x + "    loc.p.y: " + loc.p.y)
             when(movex){
-                1 -> loc.p = Point(loc.p.x + game.speed/arbval, loc.p.y)
-                -1 -> loc.p = Point(loc.p.x - game.speed/arbval, loc.p.y)
+                1 -> loc = Point3(Point(loc.p.x + game.speed/arbval, loc.p.y),loc.eye)
+                -1 -> loc = Point3(Point(loc.p.x - game.speed/arbval, loc.p.y),loc.eye)
                 else -> {
                     when(movey){
-                        1 -> loc.p = Point(loc.p.x, loc.p.y + game.speed/arbval)
-                        -1 -> loc.p = Point(loc.p.x, loc.p.y - game.speed/arbval)
+                        1 -> loc = Point3(Point(loc.p.x, loc.p.y + game.speed/arbval),loc.eye)
+                        -1 -> loc = Point3(Point(loc.p.x, loc.p.y - game.speed/arbval),loc.eye)
                         else -> println("EnemyShooter not moving good")
                     }
                 }
             }
         } else if (doneNone && timeRemainingOnScreen>=(timeSpentOnScreen*2f/5f)) {
-            println("enemyparticle added")
+            println("UWE-enemyparticle added")
             doneNone = false
             doneOnce = true
             game.addToNonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
@@ -55,14 +55,14 @@ class EnemyShooter(override val loc: Point3, private val game: Game): Enemy {
             game.addToNonShipList.add(EnemyParticle(loc, game.shipList[(Math.random()*game.shipList.size).toInt()].loc, game))
         }
                 else if (timeRemainingOnScreen > 0){
-                    println("goin bak")
+                    println("UWE-goin bak")
                     when(movex){
-                        1 -> loc.p = Point(loc.p.x - game.speed/arbval, loc.p.y)
-                        -1 -> loc.p = Point(loc.p.x + game.speed/arbval, loc.p.y)
+                        1 -> loc = Point3(Point(loc.p.x - game.speed/arbval, loc.p.y),loc.eye)
+                        -1 -> loc = Point3(Point(loc.p.x + game.speed/arbval, loc.p.y),loc.eye)
                         else -> {
                             when(movey){
-                                1 -> loc.p = Point(loc.p.x, loc.p.y - game.speed/arbval)
-                                -1 -> loc.p = Point(loc.p.x, loc.p.y + game.speed/arbval)
+                                1 -> loc = Point3(Point(loc.p.x, loc.p.y - game.speed/arbval),loc.eye)
+                                -1 -> loc = Point3(Point(loc.p.x, loc.p.y + game.speed/arbval),loc.eye)
                                 else -> println("EnemyShooter not moving good")
                             }
                         }

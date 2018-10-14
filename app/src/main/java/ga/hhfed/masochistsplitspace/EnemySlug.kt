@@ -23,7 +23,7 @@ class EnemySlug(override var loc: Point3, private val game: Game): Enemy{
     //ABOVE CHANGING SHIPLIST TO CORRECT EYE ADN STUFF IS NEEDED (or doing it at some point)
 
     override fun move(){
-        loc.p = Point((loc.p.x + xspeed).toFloat(), (loc.p.y + yspeed).toFloat())
+        loc = Point3(Point((loc.p.x + xspeed).toFloat(), (loc.p.y + yspeed).toFloat()),loc.eye)
         accel();
     }
 

@@ -13,7 +13,7 @@ class EnemyLineMan(override var loc: Point3, private val game: Game): Enemy{
                 loc.p.x > game.view.eyeSize.x ||
                 loc.p.x < 0
     override fun move(){
-        loc.p = Point(loc.p.x + game.speed, yintercept + loc.p.y + game.speed*slope.toFloat())
+        loc = Point3(Point(loc.p.x + game.speed, yintercept + loc.p.y + game.speed*slope.toFloat()),loc.eye)
     }
     private val yintercept = loc.p.y
     private val slope = (Math.random()*2 - 1)*5

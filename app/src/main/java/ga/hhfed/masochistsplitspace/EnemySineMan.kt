@@ -20,7 +20,7 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
     override fun move(){
         //loc.p = Point(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle))*20, 20*sin(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle))))
         tickup()
-        loc.p = Point((((ticks)*cos(axisAngle) + sin(ticks)*sin(axisAngle))*sizeFactor).toFloat() + startx, starty + (sizeFactor*6f/5f)*((-1f)*(ticks)*(sin(axisAngle))+sin(ticks)*cos(axisAngle)).toFloat())
+        loc = Point3(Point((((ticks)*cos(axisAngle) + sin(ticks)*sin(axisAngle))*sizeFactor).toFloat() + startx, starty + (sizeFactor*6f/5f)*((-1f)*(ticks)*(sin(axisAngle))+sin(ticks)*cos(axisAngle)).toFloat()),loc.eye)
         //loc.p = Point(((loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle)), sin((-1)*(loc.p.x+game.speed)*cos(axisAngle) + loc.p.y*sin(axisAngle)))
     }
 
