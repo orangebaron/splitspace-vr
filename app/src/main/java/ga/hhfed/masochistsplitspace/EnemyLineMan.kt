@@ -16,7 +16,7 @@ class EnemyLineMan(override var loc: Point3, private val game: Game): Enemy{
         loc = Point3(Point(loc.p.x + game.speed, yintercept + loc.p.y + game.speed*slope.toFloat()),loc.eye)
     }
     private val yintercept = loc.p.y
-    private val slope = (Math.random()*2 - 1)*5
+    private val slope = (Math.random()*2 - 1)*2
     private val angle = atan(slope).toFloat()
     private val bitmap: Bitmap
     init {

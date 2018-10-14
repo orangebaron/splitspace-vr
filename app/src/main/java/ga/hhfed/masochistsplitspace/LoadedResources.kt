@@ -12,7 +12,7 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
 
     val shipTest: Bitmap = scaledBmp(R.drawable.pinkship, 1 / 20f)
     val shooter: Bitmap = scaledBmp(R.drawable.flamedisciple, 1 / 10f)
-    val flame: Bitmap = scaledBmp(R.drawable.firefly, 1 / 10f)
+    val flame: Bitmap = scaledBmp(R.drawable.firefly, 1 / 20f)
     val signMan: Bitmap = scaledBmp(R.drawable.sineman, 1 / 10f)
     val lineMan: Bitmap = scaledBmp(R.drawable.lineman, 1/20f)
 }
