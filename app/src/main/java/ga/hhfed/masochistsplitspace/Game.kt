@@ -11,13 +11,12 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     enum class Powerup {
         Split, // Splits
         Ghost, // Temporary Invulnerability (needs them GRAPHICS)
-        Laser, // Shoots a LASER
         Agility // Increases mobility (side to side non-jumping motion)
     }
     var ghostTimer = 0f
     var agilityTimer = 0f
 
-    var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),view.loadedResources.shipTest,Point(5f,5f), this))
+    var shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),Point(5f,5f), this))
     var nonShipList = mutableListOf<ExtraObject>()
     var addToNonShipList = mutableListOf<ExtraObject>()
     var countdownVariable = .5f
@@ -43,14 +42,10 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         when (p) {
             Powerup.Split ->
                 for (i in 0 until (shipList.size)) {
-                    shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), view.loadedResources.shipTest, Point(shipList[i].speed.x * (-1f), shipList[i].speed.y), this))
+                    shipList.add(Ship(Point3(shipList[i].loc.p, shipList[i].loc.eye), Point(shipList[i].speed.x * (-1f)+(if (shipList[i].speed.x>0) -10 else 10), shipList[i].speed.y), this))
                 }
             Powerup.Ghost ->
-                //TODO: change ship's bitmap
                 ghostTimer = 20f
-            Powerup.Laser -> {
-                //do
-            }
             Powerup.Agility -> {
                 shipList.forEach {
                     it.speedMultiplier = 1.5f
@@ -61,6 +56,13 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
     }
 
     private fun tick() {
+        if (shipList.size == 0) {
+            if(view.tiltManager.LRsteerAngle>6 || view.tiltManager.LRsteerAngle<-6)
+                shipList = mutableListOf(Ship(Point3(Point(0f,0f),VRView.Eye.Left),Point(5f,5f), this))
+            view.invalidate()
+            return
+        }
+
         countdownVariable -= oneOverFps / 5
         if (countdownVariable < 0) {
             countdownVariable = .5f
@@ -119,6 +121,11 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         try {
             shipList.forEach { it.draw(canv) }
             nonShipList.forEach { it.draw(canv) }
+            if (shipList.size == 0) {
+                val img = loadedResources.shipTest
+                view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Left))
+                view.drawBmpForEye(canv,img,Point3((view.eyeSize-Point(img.height.toFloat(),img.width.toFloat()))*.5f,VRView.Eye.Right))
+            }
         } catch (e: Throwable) {
             println("UWE-ERR drawing $e")
         }
