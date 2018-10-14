@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.concurrent.timerTask
 
 class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
-    private val oneOverFps = 1f/fps
+    val oneOverFps = 1f/fps
     var speed = 5*oneOverFps
 
     enum class Powerup {
@@ -69,15 +69,15 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         val currentMotionState = MotionState(
             lookingUp = view.tiltManager.nodAngle>.35,
             lookingDown = view.tiltManager.nodAngle<-.35,
-            turningRight = view.tiltManager.LRturnSpeed<-2,
-            turningLeft = view.tiltManager.LRturnSpeed>2
+            turningRight = view.tiltManager.LRturnSpeed>2,
+            turningLeft = view.tiltManager.LRturnSpeed<-2
         )
         if (currentMotionState != lastMotionState) {
             //println("UWE- $currentMotionState $lastMotionState")
             if (currentMotionState.turningRight && shipList[0].loc.eye==VRView.Eye.Left) {
-                shipList.forEach { it.loc.eye = VRView.Eye.Right }
+                shipList.forEach { it.loc.eye = VRView.Eye.Right; it.residualTurnSpeed = Point(0f,0f) }
             } else if (currentMotionState.turningLeft && shipList[0].loc.eye==VRView.Eye.Right) {
-                shipList.forEach { it.loc.eye = VRView.Eye.Left }
+                shipList.forEach { it.loc.eye = VRView.Eye.Left; it.residualTurnSpeed = Point(0f,0f) }
             }
             lastMotionState = currentMotionState
         }

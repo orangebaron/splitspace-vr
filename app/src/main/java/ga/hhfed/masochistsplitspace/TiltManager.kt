@@ -25,7 +25,7 @@ class TiltManager(activity: MainActivity) {
         val gyroListener = object: SensorEventListener {
             override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
             override fun onSensorChanged(p0: SensorEvent?) { p0?.let {
-                LRturnSpeed = p0.values[0]
+                LRturnSpeed = -p0.values[0]
             }}
         }
         manager.registerListener(gyroListener,manager.getDefaultSensor(TYPE_GYROSCOPE), SENSOR_DELAY_NORMAL)
