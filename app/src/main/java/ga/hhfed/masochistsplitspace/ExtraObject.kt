@@ -13,4 +13,5 @@ interface ExtraObject {
     fun move()
     fun draw(canvas: Canvas)
     val loc: Point3
+    var streamid: Int
 }

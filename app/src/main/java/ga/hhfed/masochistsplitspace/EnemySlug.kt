@@ -26,9 +26,11 @@ class EnemySlug(override var loc: Point3, private val game: Game): Enemy{
         loc = Point3(Point((loc.p.x + xspeed).toFloat(), (loc.p.y + yspeed).toFloat()),loc.eye)
         accel()
     }
+    override var streamid = game.loadedResources.moistNoises
 
     private val bitmap: Bitmap
     init {
+        game.loadedResources.playSound(streamid, 0.25f)
         val matrix = Matrix()
         //matrix.setRotate(angle-90) //chjange to appropriate thing
         val base = game.loadedResources.shooter
