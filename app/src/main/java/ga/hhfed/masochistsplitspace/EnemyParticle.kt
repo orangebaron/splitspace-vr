@@ -7,17 +7,15 @@ import kotlin.math.atan
 
 class EnemyParticle(override var loc: Point3, val shiploc: Point3, private val game: Game): Enemy{
     override fun isIn (p: Point): Boolean = false//p.x > loc.p.x && p.y > loc.p.y && p.x < loc.p.x+radius && p.y < loc.p.y-radius
-    private val yintercept = loc.p.y
-    private val speedMultiplier = 10f
+    private val speed = ((shiploc.p-loc.p)/(shiploc.p-loc.p).size)*100f
     override fun move() {
-        loc = Point3(Point(loc.p.x + game.speed*speedMultiplier,yintercept + loc.p.x * slope*speedMultiplier),loc.eye)
+        loc = Point3(loc.p+speed*game.oneOverFps,loc.eye)
     }
-    private val slope = ((shiploc.p.y.toDouble()-loc.p.y.toDouble())/(shiploc.p.x.toDouble()-loc.p.x.toDouble())).toFloat()
 
     private val bitmap: Bitmap
     init {
         val matrix = Matrix()
-        matrix.setRotate((atan(slope)*(180f/3.14159265)).toFloat()) //change to appropriate thing
+        matrix.setRotate((Math.atan2(speed.y.toDouble(),speed.x.toDouble())*(180f/3.14159265)).toFloat()) //change to appropriate thing
         val base = game.view.loadedResources.flame
         bitmap = Bitmap.createBitmap(base, 0, 0, base.width, base.height, matrix, false)
     }
