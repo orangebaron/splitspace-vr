@@ -32,7 +32,9 @@ class EnemySineMan(override var loc: Point3, private val game: Game): Enemy{
                 loc.p.x > game.view.eyeSize.x ||
                 loc.p.x < 0
     private val bitmap: Bitmap
+    override var streamid = game.loadedResources.signManNoise
     init {
+        game.loadedResources.playSound(game.loadedResources.signManNoise, 1f)
         val matrix = Matrix()
         matrix.setRotate(90f) //chjange to appropriate thing
         val base = game.loadedResources.signMan //TODO MAKE SINEMAN GRAPHIC

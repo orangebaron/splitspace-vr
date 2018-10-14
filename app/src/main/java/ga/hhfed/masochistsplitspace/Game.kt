@@ -76,8 +76,11 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         nonShipList.forEach {
             it.move()
             shipList.forEach { ship -> if (it.isIn(ship.loc.p) && it.loc.eye == ship.loc.eye) it.touchEffect(ship) }
-            if (it.canKill)
+            if (it.canKill) {
+                try {this.loadedResources.sounds.pause(it.streamid)}
+                catch (e:Throwable) {(println("Maybe error $e"))}
                 extraObjectsToRemove.add(it)
+            }
         }
         extraObjectsToRemove.forEach { nonShipList.remove(it) }
 
@@ -116,6 +119,7 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
 
     val timer = Timer()
     init {
+        println("jry speed: " + speed)
         timer.scheduleAtFixedRate(timerTask {
             try {
                 tick()

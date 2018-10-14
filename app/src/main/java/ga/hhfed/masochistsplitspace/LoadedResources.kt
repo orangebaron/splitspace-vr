@@ -29,15 +29,23 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
             else
                 @Suppress("deprecation")
                 SoundPool(20, AudioManager.STREAM_MUSIC, 0)
-    //val dingSound = sounds.load(view.context, R.raw.bell_ding, 0)
+    val boomSound = sounds.load(view.context, R.raw.boom1, 0)
+    val boomSound2 = sounds.load(view.context, R.raw.boom2, 0)
+    val boomSound3 = sounds.load(view.context, R.raw.boom4, 0)
+    val signManNoise = sounds.load(view.context, R.raw.signman, 0)
+    val lineManNoise = sounds.load(view.context, R.raw.eyeball_man, 0)
+    val shooterNoises = sounds.load(view.context, R.raw.voice007, 0)
+    val laserNoises = sounds.load(view.context, R.raw.pew, 0)
+    val moistNoises = sounds.load(view.context, R.raw.moist_noises, 0);
+    val thunderstormyMetal = sounds.load(view.context, R.raw.thunderstormy_metal, 0);
 
-    private val soundtracks: List<MediaPlayer> = listOf(
+    //private val soundtracks: List<MediaPlayer> = listOf(
             /*MediaPlayer.create(context, R.raw.splitspace_theme),
             MediaPlayer.create(context, R.raw.perilous_battle),
-            MediaPlayer.create(context, R.raw.strange_battle))*/)
+            MediaPlayer.create(context, R.raw.strange_battle))*/
     private var playing = 2
     private var paused = true
-    fun playTrack(id: Int) {
+    /*fun playTrack(id: Int) {
         if (playing == id) return
         playing = id
         if (paused) resumeTrack()
@@ -64,5 +72,5 @@ class LoadedResources(private val res: Resources, private val view: VRView) {
             it.isLooping = true
         }
         resumeTrack()
-    }
+    }*/
 }
