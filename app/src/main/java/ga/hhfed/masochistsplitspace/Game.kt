@@ -29,6 +29,23 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
             else -> error("this should not appear")
         })
     }
+    var pillEye = VRView.Eye.Left
+    private fun randoEye (): VRView.Eye{
+        return when{
+            (Math.random()<.5) -> VRView.Eye.Left
+            (Math.random()<=1) -> VRView.Eye.Right
+            else -> error("should be impossibru Uwe-error")
+        }
+    }
+    private fun addPill(){
+        nonShipList.add(when {
+                    (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Split, this)
+            (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Ghost, this)
+            (Math.random()<.3333) -> PowerupPill(Point3(Point((view.eyeSize.x/3f + Math.random()*view.eyeSize.x/3f).toFloat(), (view.eyeSize.y/3f + Math.random()*view.eyeSize.y/3f).toFloat()), pillEye), Powerup.Agility, this)
+            else -> error("should be impossibru Uwe-error")
+        })
+        pillExists = true
+    }
 
     private val edgeSpawning //mm jarry I approve of ur getter
         get() = Point3(
@@ -55,6 +72,8 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         }
     }
 
+    var pillcountdownVariable = 100f
+    private var pillExists = false
     private fun tick() {
         if (shipList.size == 0) {
             if(view.tiltManager.LRsteerAngle>6 || view.tiltManager.LRsteerAngle<-6)
@@ -67,6 +86,11 @@ class Game(fps: Int, val loadedResources: LoadedResources, val view: VRView){
         if (countdownVariable < 0) {
             countdownVariable = .5f
             addRandomObject()
+        }
+        pillcountdownVariable -= oneOverFps / 5
+        if(pillcountdownVariable < 0 && !pillExists){
+            pillcountdownVariable = 100f
+            pillExists = true
         }
 
         if (ghostTimer > 0f) {
