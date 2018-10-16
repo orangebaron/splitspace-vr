@@ -13,15 +13,15 @@ class EnemyLineMan(override var loc: Point3, private val game: Game): Enemy{
                 loc.p.x > game.view.eyeSize.x ||
                 loc.p.x < 0
     override fun move(){
-        loc = Point3(Point(loc.p.x + game.speed, yintercept + loc.p.y + game.speed*slope.toFloat()),loc.eye)
+        loc = Point3(Point(loc.p.x + game.speed,loc.p.y + game.speed*slope.toFloat()),loc.eye)
     }
-    private val yintercept = loc.p.y
+    //private val yintercept = loc.p
     private val slope = (Math.random()*2 - 1)*2
     private val angle = atan(slope).toFloat()
     private val bitmap: Bitmap
     override var streamid = game.loadedResources.lineManNoise
     init {
-        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, 1f)}
+        if (!canKill)  { streamid = game.loadedResources.playSound(streamid, .4f)}
         val matrix = Matrix()
         matrix.setRotate((angle*(180f/3.14159265)).toFloat()) //chjange to appropriate thing
         val base = game.loadedResources.lineMan //TODO MAKE LINEMAN GRAPHIC
