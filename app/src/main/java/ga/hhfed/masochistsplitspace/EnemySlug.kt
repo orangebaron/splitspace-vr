@@ -9,8 +9,8 @@ class EnemySlug(override var loc: Point3, private val game: Game): Enemy{
     override var canKill = false
         private set
 
-    private val accelConst = .01 //SUBJECT TO CHANGE
-    private val startConst = .25 //SUBJECT TO CHANGE
+    private val accelConst = .01 // SUBJECT TO CHANGE
+    private val startConst = .25 // SUBJECT TO CHANGE
 
     private var xspeed = (game.shipList[0].loc.p.x.toDouble()-loc.p.x.toDouble())*startConst
     private var yspeed = (game.shipList[0].loc.p.y.toDouble()-loc.p.y.toDouble())*startConst
