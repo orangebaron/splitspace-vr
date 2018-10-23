@@ -9,6 +9,7 @@ import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_NORMAL
 
 class TiltManager(activity: MainActivity) {
+    // Variable init
     var nodAngle = 0.0
         private set
     var LRsteerAngle = 0f
